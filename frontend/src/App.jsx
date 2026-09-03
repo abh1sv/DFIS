@@ -78,37 +78,40 @@ function App() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>DFIS Dashboard</h1>
+    <div className="min-h-screen bg-slate-950 text-white p-8">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-cyan-400">
+          DFIS
+        </h1>
 
-      <div
-        style={{
-          display: "flex",
-          gap: "15px",
-          marginBottom: "30px",
-        }}
-      >
-        <div style={cardStyle}>
+        <p className="text-slate-400">
+          Digital Footprint Intelligence Scanner
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+
+        <div className="bg-slate-900 border border-slate-700 rounded-xl p-5 shadow-lg">
           <h3>Total Scans</h3>
           <h2>{stats.total_scans}</h2>
         </div>
 
-        <div style={cardStyle}>
+        <div className="bg-slate-900 border border-slate-700 rounded-xl p-5 shadow-lg">
           <h3>Low</h3>
           <h2>{stats.low}</h2>
         </div>
 
-        <div style={cardStyle}>
+        <div className="bg-slate-900 border border-slate-700 rounded-xl p-5 shadow-lg">
           <h3>Medium</h3>
           <h2>{stats.medium}</h2>
         </div>
 
-        <div style={cardStyle}>
+        <div className="bg-slate-900 border border-slate-700 rounded-xl p-5 shadow-lg">
           <h3>High</h3>
           <h2>{stats.high}</h2>
         </div>
 
-        <div style={cardStyle}>
+        <div className="bg-slate-900 border border-slate-700 rounded-xl p-5 shadow-lg">
           <h3>Critical</h3>
           <h2>{stats.critical}</h2>
         </div>
@@ -231,12 +234,5 @@ function App() {
   );
 }
 
-const cardStyle = {
-  border: "1px solid #ccc",
-  borderRadius: "8px",
-  padding: "15px",
-  minWidth: "120px",
-  textAlign: "center",
-};
 
 export default App;
