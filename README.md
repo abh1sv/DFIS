@@ -1,32 +1,47 @@
 # DFIS - Digital Footprint Intelligence Scanner
 
-A full-stack cybersecurity investigation platform built with Flask, React, SQLite, and OSINT techniques.
+DFIS is a full-stack cybersecurity investigation platform designed to perform OSINT-based digital footprint analysis on domains, emails, and usernames.
 
 ## Features
 
-- Domain Intelligence
-- Email Intelligence
+- Domain Intelligence Scanning
+- Email Intelligence Analysis
 - Username Investigation
 - Risk Scoring Engine
 - Investigation History
-- Dashboard Analytics
 - Audit Logging
+- Dashboard Analytics
+- SQLite Data Storage
 
 ## Tech Stack
 
-- Flask
-- React
-- SQLite
+### Backend
 - Python
+- Flask
+- SQLite
+- Requests
+- DNSPython
+- Python-WHOIS
+
+### Frontend
+- React
 - Vite
+- Axios
 
-## Screenshots
+## Project Structure
 
-(Coming Soon)
+DFIS/
+├── backend/
+├── frontend/
+├── database/
+├── scanners/
+├── logs/
+└── reports/
 
-## Future Improvements
+## Future Roadmap
 
+- Dark SOC Dashboard
 - VirusTotal Integration
 - IOC Extraction
-- PDF Reporting
-- Threat Intelligence Dashboard
+- PDF Report Generation
+- Threat Intelligence Analytics
