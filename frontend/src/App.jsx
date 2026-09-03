@@ -1,0 +1,242 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+function App() {
+  const [stats, setStats] = useState(null);
+  const [recentScans, setRecentScans] = useState([]);
+
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [scanResult, setScanResult] = useState(null);
+
+  const loadStats = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:5000/stats"
+      );
+
+      setStats(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const loadRecentScans = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:5000/recent_scans"
+      );
+
+      setRecentScans(response.data.scans);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const runInvestigation = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000/scan/full",
+        {
+          email,
+          username,
+        }
+      );
+
+      setScanResult(response.data);
+
+      await loadStats();
+      await loadRecentScans();
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    loadStats();
+    loadRecentScans();
+  }, []);
+
+  if (!stats) {
+    return <h1>Loading...</h1>;
+  }
+
+  const getSeverityColor = (severity) => {
+    switch (severity) {
+      case "LOW":
+        return "green";
+      case "MEDIUM":
+        return "gold";
+      case "HIGH":
+        return "orange";
+      case "CRITICAL":
+        return "red";
+      default:
+        return "gray";
+    }
+  };
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h1>DFIS Dashboard</h1>
+
+      <div
+        style={{
+          display: "flex",
+          gap: "15px",
+          marginBottom: "30px",
+        }}
+      >
+        <div style={cardStyle}>
+          <h3>Total Scans</h3>
+          <h2>{stats.total_scans}</h2>
+        </div>
+
+        <div style={cardStyle}>
+          <h3>Low</h3>
+          <h2>{stats.low}</h2>
+        </div>
+
+        <div style={cardStyle}>
+          <h3>Medium</h3>
+          <h2>{stats.medium}</h2>
+        </div>
+
+        <div style={cardStyle}>
+          <h3>High</h3>
+          <h2>{stats.high}</h2>
+        </div>
+
+        <div style={cardStyle}>
+          <h3>Critical</h3>
+          <h2>{stats.critical}</h2>
+        </div>
+      </div>
+
+      <h2>Run Investigation</h2>
+
+      <div style={{ marginBottom: "20px" }}>
+        <input
+          type="text"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={{ marginRight: "10px" }}
+        />
+
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          style={{ marginRight: "10px" }}
+        />
+
+        <button onClick={runInvestigation}>
+          Run Investigation
+        </button>
+      </div>
+
+      {scanResult && (
+        <div
+          style={{
+            border: "1px solid #ccc",
+            padding: "15px",
+            marginBottom: "20px",
+            borderRadius: "8px"
+          }}
+        >
+          <h3>Investigation Result</h3>
+
+          <p>
+            <strong>Overall Score:</strong>{" "}
+            {scanResult.risk_assessment.overall_score}
+          </p>
+
+          <p>
+            <strong>Severity:</strong>{" "}
+            <span
+              style={{
+                backgroundColor: getSeverityColor(
+                  scanResult.risk_assessment.severity
+                ),
+                color: "white",
+                padding: "4px 10px",
+                borderRadius: "6px",
+              }}
+            >
+              {scanResult.risk_assessment.severity}
+            </span>
+          </p>
+
+          <h4>Findings</h4>
+
+          <ul>
+            {scanResult.risk_assessment.findings.map(
+              (finding, index) => (
+                <li key={index}>{finding}</li>
+              )
+            )}
+          </ul>
+        </div>
+      )}
+
+      <h2>Recent Investigations</h2>
+
+      <table
+        border="1"
+        cellPadding="10"
+        style={{
+          borderCollapse: "collapse",
+          width: "100%",
+        }}
+      >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Target</th>
+            <th>Risk Score</th>
+            <th>Severity</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {recentScans.map((scan) => (
+            <tr key={scan.id}>
+              <td>{scan.id}</td>
+              <td>{scan.target}</td>
+              <td>{scan.risk_score}</td>
+              <td>
+                <span
+                  style={{
+                    backgroundColor: getSeverityColor(
+                      scan.severity
+                    ),
+                    color: "white",
+                    padding: "4px 10px",
+                    borderRadius: "6px",
+                  }}
+                >
+                  {scan.severity}
+                </span>
+              </td>
+              <td>{scan.timestamp}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+const cardStyle = {
+  border: "1px solid #ccc",
+  borderRadius: "8px",
+  padding: "15px",
+  minWidth: "120px",
+  textAlign: "center",
+};
+
+export default App;
