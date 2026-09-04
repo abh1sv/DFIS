@@ -1,3 +1,4 @@
+import jsPDF from "jspdf";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {
@@ -92,6 +93,43 @@ function App() {
       default:
         return "gray";
     }
+  };
+
+  const exportPDF = () => {
+    if (!scanResult) return;
+
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("DFIS Investigation Report", 20, 20);
+
+    doc.setFontSize(12);
+
+    doc.text(
+      `Risk Score: ${scanResult.risk_assessment.overall_score}`,
+      20,
+      40
+    );
+
+    doc.text(
+      `Severity: ${scanResult.risk_assessment.severity}`,
+      20,
+      50
+    );
+
+    doc.text("Findings:", 20, 70);
+
+    scanResult.risk_assessment.findings.forEach(
+      (finding, index) => {
+        doc.text(
+          `• ${finding}`,
+          25,
+          85 + index * 10
+        );
+      }
+    );
+
+    doc.save("DFIS_Report.pdf");
   };
 
   const chartData = [
@@ -336,6 +374,14 @@ function App() {
               )
             )}
           </ul>
+
+          <button
+            onClick={exportPDF}
+            className="mt-4 bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg"
+          >
+            Export PDF Report
+          </button>
+
         </div>
       )}
 
