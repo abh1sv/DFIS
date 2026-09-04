@@ -4,6 +4,7 @@ import sqlite3
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
+from scanners.gravatar_scan import scan_gravatar
 from scanners.domain_scan import get_domain_info
 from scanners.email_scan import scan_email
 from scanners.username_scan import scan_username
@@ -83,12 +84,23 @@ def full_scan():
     domain_result = get_domain_info(domain)
     email_result = scan_email(email)
     username_result = scan_username(username)
+    gravatar_result = scan_gravatar(email)
+    print(gravatar_result)
 
     risk_result = calculate_risk(
         domain_result,
         email_result,
         username_result
     )
+
+    if gravatar_result["found"]:
+        risk_result["findings"].append(
+            gravatar_result["finding"]
+        )
+
+        risk_result["overall_score"] += 5
+
+    print(risk_result)
 
     save_scan(
         "FULL_SCAN",
@@ -101,6 +113,7 @@ def full_scan():
         "domain_scan": domain_result,
         "email_scan": email_result,
         "username_scan": username_result,
+        "gravatar_scan": gravatar_result,
         "risk_assessment": risk_result
     })
 
@@ -142,6 +155,17 @@ def test_full():
         email_result,
         username_result
     )
+
+    gravatar_result = scan_gravatar(email)
+
+    if gravatar_result["found"]:
+        risk_result["findings"].append(
+            gravatar_result["finding"]
+        )
+
+        risk_result["overall_score"] += 5
+
+    print(risk_result)
 
     save_scan(
         "FULL_SCAN",
