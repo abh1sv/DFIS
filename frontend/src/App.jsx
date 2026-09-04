@@ -117,40 +117,45 @@ function App() {
         </div>
       </div>
 
-      <h2>Run Investigation</h2>
+      <div className="bg-slate-900 border border-slate-700 rounded-xl p-6 mb-6">
+        <h2 className="text-2xl font-semibold mb-4">
+          Run Investigation
+        </h2>
 
-      <div style={{ marginBottom: "20px" }}>
+        <div className="flex flex-col md:flex-row gap-3">
         <input
           type="text"
           placeholder="Email"
+          className="bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 flex-1"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{ marginRight: "10px" }}
+          
         />
 
         <input
           type="text"
           placeholder="Username"
+          className="bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 flex-1"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          style={{ marginRight: "10px" }}
+          
         />
 
-        <button onClick={runInvestigation}>
+        <button
+          onClick={runInvestigation}
+          className="bg-cyan-600 hover:bg-cyan-700 px-5 py-2 rounded-lg font-semibold"
+        >
           Run Investigation
         </button>
       </div>
+      </div>
 
       {scanResult && (
-        <div
-          style={{
-            border: "1px solid #ccc",
-            padding: "15px",
-            marginBottom: "20px",
-            borderRadius: "8px"
-          }}
-        >
-          <h3>Investigation Result</h3>
+        <div className="bg-slate-900 border border-slate-700 rounded-xl p-6 mb-6">
+        
+          <h3 className="text-2xl font-semibold mb-4">
+            Investigation Result
+          </h3>
 
           <p>
             <strong>Overall Score:</strong>{" "}
@@ -185,7 +190,11 @@ function App() {
         </div>
       )}
 
-      <h2>Recent Investigations</h2>
+      <h2 className="text-2xl font-semibold mb-4">
+        Recent Investigations
+      </h2>
+
+      <div className="bg-slate-900 border border-slate-700 rounded-xl p-4 overflow-x-auto">
 
       <table
         border="1"
@@ -230,6 +239,7 @@ function App() {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
