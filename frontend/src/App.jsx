@@ -4,7 +4,7 @@ import axios from "axios";
 function App() {
   const [stats, setStats] = useState(null);
   const [recentScans, setRecentScans] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [scanResult, setScanResult] = useState(null);
@@ -35,6 +35,8 @@ function App() {
 
   const runInvestigation = async () => {
     try {
+      setLoading(true);
+
       const response = await axios.post(
         "http://127.0.0.1:5000/scan/full",
         {
@@ -50,6 +52,8 @@ function App() {
 
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -92,28 +96,53 @@ function App() {
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
 
         <div className="bg-slate-900 border border-slate-700 rounded-xl p-5 shadow-lg">
-          <h3>Total Scans</h3>
-          <h2>{stats.total_scans}</h2>
+          <h3 className="text-slate-400 text-sm">
+            Total Scans
+          </h3>
+
+          <h2 className="text-3xl font-bold text-cyan-400 mt-2">
+            {stats.total_scans}
+          </h2>
         </div>
 
         <div className="bg-slate-900 border border-slate-700 rounded-xl p-5 shadow-lg">
-          <h3>Low</h3>
-          <h2>{stats.low}</h2>
+          <h3 className="text-slate-400 text-sm">
+            Low
+          </h3>
+
+          <h2 className="text-3xl font-bold text-green-400 mt-2">
+            {stats.low}
+          </h2>
         </div>
 
         <div className="bg-slate-900 border border-slate-700 rounded-xl p-5 shadow-lg">
-          <h3>Medium</h3>
-          <h2>{stats.medium}</h2>
+          <h3 className="text-slate-400 text-sm">
+            Medium
+          </h3>
+
+          <h2 className="text-3xl font-bold text-yellow-400 mt-2">
+            {stats.medium}
+          </h2>
         </div>
 
         <div className="bg-slate-900 border border-slate-700 rounded-xl p-5 shadow-lg">
-          <h3>High</h3>
-          <h2>{stats.high}</h2>
+          <h3 className="text-slate-400 text-sm">
+            High
+          </h3>
+
+          <h2 className="text-3xl font-bold text-orange-400 mt-2">
+            {stats.high}
+          </h2>
         </div>
 
         <div className="bg-slate-900 border border-slate-700 rounded-xl p-5 shadow-lg">
-          <h3>Critical</h3>
-          <h2>{stats.critical}</h2>
+          <h3 className="text-slate-400 text-sm">
+            Critical
+          </h3>
+
+          <h2 className="text-3xl font-bold text-red-400 mt-2">
+            {stats.critical}
+          </h2>
         </div>
       </div>
 
@@ -138,14 +167,19 @@ function App() {
           className="bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 flex-1"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          
+
         />
 
         <button
           onClick={runInvestigation}
-          className="bg-cyan-600 hover:bg-cyan-700 px-5 py-2 rounded-lg font-semibold"
+          disabled={loading}
+          className={`px-5 py-2 rounded-lg font-semibold ${
+            loading
+              ? "bg-slate-600 cursor-not-allowed"
+              : "bg-cyan-600 hover:bg-cyan-700"
+          }`}
         >
-          Run Investigation
+          {loading ? "Running Investigation..." : "Run Investigation"}
         </button>
       </div>
       </div>
@@ -157,9 +191,11 @@ function App() {
             Investigation Result
           </h3>
 
-          <p>
+          <p className="text-lg mt-2">
             <strong>Overall Score:</strong>{" "}
-            {scanResult.risk_assessment.overall_score}
+            <span className="text-cyan-400 font-bold">
+              {scanResult.risk_assessment.overall_score}
+            </span>
           </p>
 
           <p>
@@ -180,7 +216,7 @@ function App() {
 
           <h4>Findings</h4>
 
-          <ul>
+          <ul className="list-disc ml-6 mt-2 space-y-1">
             {scanResult.risk_assessment.findings.map(
               (finding, index) => (
                 <li key={index}>{finding}</li>
