@@ -7,6 +7,11 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
 } from "recharts";
 
 function App() {
@@ -102,6 +107,14 @@ function App() {
     "#f97316",
     "#ef4444",
   ];
+
+  const trendData = recentScans
+    .slice(0, 10)
+    .reverse()
+    .map((scan) => ({
+      id: scan.id,
+      score: scan.risk_score,
+    }));
 
   return (
     <div className="min-h-screen bg-slate-950 text-white p-8">
@@ -210,6 +223,42 @@ function App() {
         </div>
       </div>
 
+      <div className="bg-slate-900 border border-slate-700 rounded-xl p-6 mb-8">
+        <h2 className="text-2xl font-semibold mb-6">
+          Investigation Trends
+        </h2>
+
+        <div style={{ width: "100%", height: 350 }}>
+          <ResponsiveContainer>
+            <BarChart data={trendData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+
+              <XAxis
+                dataKey="id"
+                stroke="#94a3b8"
+              />
+
+              <YAxis stroke="#94a3b8" />
+
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#0f172a",
+                  border: "1px solid #334155",
+                  borderRadius: "8px",
+                  color: "#fff",
+                }}
+              />
+
+              <Bar
+                dataKey="score"
+                fill="#06b6d4"
+                radius={[6, 6, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
       <div className="bg-slate-900 border border-slate-700 rounded-xl p-6 mb-6">
         <h2 className="text-2xl font-semibold mb-4">
           Run Investigation
@@ -296,31 +345,27 @@ function App() {
 
       <div className="bg-slate-900 border border-slate-700 rounded-xl p-4 overflow-x-auto">
 
-      <table
-        border="1"
-        cellPadding="10"
-        style={{
-          borderCollapse: "collapse",
-          width: "100%",
-        }}
-      >
-        <thead>
+      <table className="w-full text-left">
+        <thead className="border-b border-slate-700 text-slate-400">
           <tr>
-            <th>ID</th>
-            <th>Target</th>
-            <th>Risk Score</th>
-            <th>Severity</th>
-            <th>Timestamp</th>
+            <th className="py-3">ID</th>
+            <th className="py-3">Target</th>
+            <th className="py-3">Risk Score</th>
+            <th className="py-3">Severity</th>
+            <th className="py-3">Timestamp</th>
           </tr>
         </thead>
 
-        <tbody>
+        <tbody className="divide-y divide-slate-800">
           {recentScans.map((scan) => (
-            <tr key={scan.id}>
-              <td>{scan.id}</td>
-              <td>{scan.target}</td>
-              <td>{scan.risk_score}</td>
-              <td>
+            <tr
+              key={scan.id}
+              className="hover:bg-slate-800 transition"
+            >
+              <td className="py-3">{scan.id}</td>
+              <td className="py-3">{scan.target}</td>
+              <td className="py-3">{scan.risk_score}</td>
+              <td className="py-3">
                 <span
                   style={{
                     backgroundColor: getSeverityColor(
