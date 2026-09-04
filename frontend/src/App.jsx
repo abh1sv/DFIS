@@ -180,6 +180,7 @@ function App() {
                 data={chartData}
                 dataKey="value"
                 nameKey="name"
+                innerRadius={60}
                 outerRadius={120}
                 label
               >
@@ -191,8 +192,19 @@ function App() {
                 ))}
               </Pie>
 
-              <Tooltip />
-              <Legend />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#0f172a",
+                  border: "1px solid #334155",
+                  borderRadius: "8px",
+                  color: "#fff",
+                }}
+              />
+              <Legend
+                wrapperStyle={{
+                  color: "#fff",
+                }}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
