@@ -1,4 +1,5 @@
 import jsPDF from "jspdf";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {
@@ -155,16 +156,50 @@ function App() {
     }));
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white p-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-cyan-400">
+    <div className="min-h-screen bg-slate-950 text-white">
+
+      <nav className="bg-slate-900 border-b border-slate-700 px-8 py-4 flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-cyan-400">
           DFIS
         </h1>
 
-        <p className="text-slate-400">
-          Digital Footprint Intelligence Scanner
-        </p>
-      </div>
+        <div className="flex gap-6">
+          <Link
+            to="/"
+            className="text-slate-300 hover:text-cyan-400"
+          >
+            Dashboard
+          </Link>
+
+          <Link
+            to="/history"
+            className="text-slate-300 hover:text-cyan-400"
+          >
+            History
+          </Link>
+
+          <Link
+            to="/about"
+            className="text-slate-300 hover:text-cyan-400"
+          >
+            About
+          </Link>
+        </div>
+      </nav>
+
+      <div className="p-8">
+
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-cyan-400">
+            DFIS
+          </h1>
+
+          <p className="text-slate-400">
+            Digital Footprint Intelligence Scanner
+          </p>
+        </div>
+
+        
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
 
@@ -342,9 +377,36 @@ function App() {
             Investigation Result
           </h3>
 
-          <p className="text-lg mt-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+
+            <div className="bg-slate-800 p-3 rounded-lg">
+              <p className="text-slate-400 text-sm">Email</p>
+              <p className="font-semibold">
+                {email || "N/A"}
+              </p>
+            </div>
+
+            <div className="bg-slate-800 p-3 rounded-lg">
+              <p className="text-slate-400 text-sm">Username</p>
+              <p className="font-semibold">
+                {username || "N/A"}
+              </p>
+            </div>
+
+            <div className="bg-slate-800 p-3 rounded-lg">
+              <p className="text-slate-400 text-sm">Domain</p>
+              <p className="font-semibold">
+                {email && email.includes("@")
+                  ? email.split("@")[1]
+                  : "N/A"}
+              </p>
+            </div>
+
+          </div>
+
+          <p className="text-xl mt-2">
             <strong>Overall Score:</strong>{" "}
-            <span className="text-cyan-400 font-bold">
+            <span className="text-cyan-400 font-bold text-2xl">
               {scanResult.risk_assessment.overall_score}
             </span>
           </p>
@@ -365,9 +427,11 @@ function App() {
             </span>
           </p>
 
-          <h4>Findings</h4>
+          <h4 className="text-xl font-semibold mt-6 mb-3">
+            Findings
+          </h4>
 
-          <ul className="list-disc ml-6 mt-2 space-y-1">
+          <ul className="list-disc ml-6 space-y-2 text-slate-300">
             {scanResult.risk_assessment.findings.map(
               (finding, index) => (
                 <li key={index}>{finding}</li>
@@ -431,6 +495,7 @@ function App() {
         </tbody>
       </table>
       </div>
+    </div>
     </div>
   );
 }

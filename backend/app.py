@@ -76,16 +76,51 @@ def full_scan():
 
     data = request.json
 
-    email = data.get("email")
-    username = data.get("username")
+    email = data.get("email", "").strip()
+    username = data.get("username", "").strip()
 
-    domain = email.split("@")[1]
+    if not email and not username:
+        return jsonify({
+            "error": "Provide email or username"
+        }), 400
 
-    domain_result = get_domain_info(domain)
-    email_result = scan_email(email)
-    username_result = scan_username(username)
-    gravatar_result = scan_gravatar(email)
-    print(gravatar_result)
+    domain = ""
+
+    if email and "@" in email:
+        domain = email.split("@")[1]
+
+    if domain:
+        domain_result = get_domain_info(domain)
+    else:
+        domain_result = {
+            "risk_score": 0,
+            "risks": []
+        }
+
+    if email:
+        email_result = scan_email(email)
+    else:
+        email_result = {
+            "risk_score": 0,
+            "risks": []
+        }
+
+    if username:
+        username_result = scan_username(username)
+    else:
+        username_result = {
+            "risk_score": 0,
+            "risks": [],
+            "found_on": []
+        }
+
+    if email:
+        gravatar_result = scan_gravatar(email)
+    else:
+        gravatar_result = {
+            "found": False,
+            "finding": None
+        }
 
     risk_result = calculate_risk(
         domain_result,
@@ -102,9 +137,16 @@ def full_scan():
 
     print(risk_result)
 
+    if email and username:
+        target = f"{email} | {username}"
+    elif email:
+        target = email
+    else:
+        target = username
+
     save_scan(
         "FULL_SCAN",
-        email,
+        target,
         risk_result["overall_score"],
         risk_result["severity"]
     )
