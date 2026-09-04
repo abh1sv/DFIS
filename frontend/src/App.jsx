@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 function App() {
   const [stats, setStats] = useState(null);
@@ -81,6 +89,20 @@ function App() {
     }
   };
 
+  const chartData = [
+    { name: "Low", value: stats.low },
+    { name: "Medium", value: stats.medium },
+    { name: "High", value: stats.high },
+    { name: "Critical", value: stats.critical },
+  ];
+
+  const COLORS = [
+    "#22c55e",
+    "#eab308",
+    "#f97316",
+    "#ef4444",
+  ];
+
   return (
     <div className="min-h-screen bg-slate-950 text-white p-8">
       <div className="mb-8">
@@ -143,6 +165,36 @@ function App() {
           <h2 className="text-3xl font-bold text-red-400 mt-2">
             {stats.critical}
           </h2>
+        </div>
+      </div>
+
+      <div className="bg-slate-900 border border-slate-700 rounded-xl p-6 mb-8">
+        <h2 className="text-2xl font-semibold mb-6">
+          Severity Distribution
+        </h2>
+
+        <div style={{ width: "100%", height: 350 }}>
+          <ResponsiveContainer>
+            <PieChart>
+              <Pie
+                data={chartData}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={120}
+                label
+              >
+                {chartData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
