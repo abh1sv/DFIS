@@ -91,6 +91,16 @@ def full_scan():
 
     if email and "@" in email:
         domain = email.split("@")[1]
+    
+    whois_result = {
+    "risk_score": 0,
+    "risks": []
+}
+
+    ip_result = {
+        "risk_score": 0,
+        "risks": []
+    }
 
     if domain:
         domain_result = get_domain_info(domain)
@@ -180,7 +190,7 @@ def test():
 def test_email():
 
     return scan_email(
-        "test@mailinator.com"
+        "xejesol458@airhemp.com"
     )
 
 @app.route("/test_username")

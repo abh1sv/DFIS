@@ -1,13 +1,32 @@
 import re
 import dns.resolver
+import os
 
-DISPOSABLE_DOMAINS = {
-    "mailinator.com",
-    "10minutemail.com",
-    "guerrillamail.com",
-    "tempmail.com",
-    "temp-mail.org"
-}
+def load_disposable_domains():
+
+    path = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "data",
+        "disposable_domains.txt"
+    )
+
+    try:
+
+        with open(path, "r") as file:
+
+            return {
+                line.strip().lower()
+                for line in file
+                if line.strip()
+            }
+
+    except Exception:
+
+        return set()
+
+
+DISPOSABLE_DOMAINS = load_disposable_domains()
 
 
 def scan_email(email):

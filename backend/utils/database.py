@@ -30,8 +30,6 @@ def save_scan(
     severity
 ):
 
-    print("SAVE_SCAN CALLED")
-
     conn = sqlite3.connect(DB_NAME)
 
     cursor = conn.cursor()
@@ -52,8 +50,6 @@ def save_scan(
     ))
 
     conn.commit()
-
-    print("ROW INSERTED")
 
     conn.close()
 
