@@ -249,6 +249,28 @@ def recent_scans():
         "scans": get_recent_scans()
     }
 
+@app.route("/scan/<int:scan_id>")
+def get_scan(scan_id):
+
+    conn = sqlite3.connect("database/dfis.db")
+    conn.row_factory = sqlite3.Row
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT * FROM scans WHERE id = ?",
+        (scan_id,)
+    )
+
+    row = cursor.fetchone()
+
+    conn.close()
+
+    if not row:
+        return {"error": "Scan not found"}, 404
+
+    return dict(row)
+
 @app.route("/test_whois")
 def test_whois():
 

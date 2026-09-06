@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import ScanDetails from "./ScanDetails";
 import {
   BrowserRouter,
   Routes,
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/history" element={<History />} />
+        <Route path="/scan/:id" element={<ScanDetails />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

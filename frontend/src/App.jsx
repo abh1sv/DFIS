@@ -404,6 +404,58 @@ function App() {
 
           </div>
 
+        <div className="bg-slate-800 rounded-xl p-4 mb-6">
+          <h4 className="text-xl font-semibold text-cyan-400 mb-4">
+            WHOIS Intelligence
+          </h4>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div>
+              <p className="text-slate-400 text-sm">
+                Registrar
+              </p>
+
+              <p className="font-semibold">
+                {scanResult.whois_scan?.registrar || "Unknown"}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-slate-400 text-sm">
+                Domain Age
+              </p>
+
+              <p className="font-semibold">
+                {scanResult.whois_scan?.domain_age_days || 0} days
+              </p>
+            </div>
+
+            <div>
+              <p className="text-slate-400 text-sm">
+                Creation Date
+              </p>
+
+              <p className="font-semibold">
+                {scanResult.whois_scan?.creation_date
+                  ?.split(" ")[0] || "N/A"}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-slate-400 text-sm">
+                Expiration Date
+              </p>
+
+              <p className="font-semibold">
+                {scanResult.whois_scan?.expiration_date
+                  ?.split(" ")[0] || "N/A"}
+              </p>
+            </div>
+
+          </div>
+        </div>
+
           <p className="text-xl mt-2">
             <strong>Overall Score:</strong>{" "}
             <span className="text-cyan-400 font-bold text-2xl">

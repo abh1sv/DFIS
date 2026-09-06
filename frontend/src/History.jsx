@@ -84,7 +84,10 @@ function History() {
             .map((scan) => (
               <tr
                 key={scan.id}
-                className="border-b border-slate-800 hover:bg-slate-800 transition"
+                className="border-b border-slate-800 cursor-pointer hover:bg-slate-800"
+                onClick={() => {
+                  window.location.href = `/scan/${scan.id}`;
+                }}
               >
                 <td className="py-3">{scan.id}</td>
                 <td>{scan.target || "N/A"}</td>
