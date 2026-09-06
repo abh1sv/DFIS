@@ -9,6 +9,8 @@ from scanners.gravatar_scan import scan_gravatar
 from scanners.domain_scan import get_domain_info
 from scanners.email_scan import scan_email
 from scanners.username_scan import scan_username
+from scanners.ip_scan import scan_ip
+
 from utils.risk_engine import calculate_risk
 from utils.database import (
     init_db,
@@ -93,6 +95,7 @@ def full_scan():
     if domain:
         domain_result = get_domain_info(domain)
         whois_result = scan_whois(domain)
+        ip_result = scan_ip(domain)
     else:
         domain_result = {
             "risk_score": 0,
@@ -160,6 +163,7 @@ def full_scan():
         "email_scan": email_result,
         "username_scan": username_result,
         "gravatar_scan": gravatar_result,
+        "ip_scan": ip_result,
         "risk_assessment": risk_result
     })
 

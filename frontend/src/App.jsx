@@ -456,6 +456,65 @@ function App() {
           </div>
         </div>
 
+        <div className="bg-slate-800 rounded-xl p-5 mb-6">
+          <h3 className="text-2xl font-bold text-cyan-400 mb-4">
+            IP Intelligence
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div>
+              <p className="text-slate-400">IP Address</p>
+              <p className="font-semibold">
+                {scanResult.ip_scan?.ip_address || "N/A"}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-slate-400">Country</p>
+              <p className="font-semibold">
+                {scanResult.ip_scan?.country || "N/A"}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-slate-400">City</p>
+              <p className="font-semibold">
+                {scanResult.ip_scan?.city || "N/A"}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-slate-400">Region</p>
+              <p className="font-semibold">
+                {scanResult.ip_scan?.region || "N/A"}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-slate-400">ISP</p>
+              <p className="font-semibold">
+                {scanResult.ip_scan?.isp || "N/A"}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-slate-400">Organization</p>
+              <p className="font-semibold">
+                {scanResult.ip_scan?.org || "N/A"}
+              </p>
+            </div>
+
+            <div className="md:col-span-2">
+              <p className="text-slate-400">ASN</p>
+              <p className="font-semibold">
+                {scanResult.ip_scan?.asn || "N/A"}
+              </p>
+            </div>
+
+          </div>
+        </div>
+
           <p className="text-xl mt-2">
             <strong>Overall Score:</strong>{" "}
             <span className="text-cyan-400 font-bold text-2xl">
