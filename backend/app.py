@@ -4,6 +4,7 @@ import sqlite3
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
+from scanners.whois_scan import scan_whois
 from scanners.gravatar_scan import scan_gravatar
 from scanners.domain_scan import get_domain_info
 from scanners.email_scan import scan_email
@@ -91,6 +92,7 @@ def full_scan():
 
     if domain:
         domain_result = get_domain_info(domain)
+        whois_result = scan_whois(domain)
     else:
         domain_result = {
             "risk_score": 0,
@@ -125,7 +127,8 @@ def full_scan():
     risk_result = calculate_risk(
         domain_result,
         email_result,
-        username_result
+        username_result,
+        whois_result
     )
 
     if gravatar_result["found"]:
@@ -153,6 +156,7 @@ def full_scan():
 
     return jsonify({
         "domain_scan": domain_result,
+        "whois_scan": whois_result,
         "email_scan": email_result,
         "username_scan": username_result,
         "gravatar_scan": gravatar_result,
@@ -244,6 +248,11 @@ def recent_scans():
     return {
         "scans": get_recent_scans()
     }
+
+@app.route("/test_whois")
+def test_whois():
+
+    return scan_whois("google.com")
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,9 +1,10 @@
-def calculate_risk(domain_result, email_result, username_result):
+def calculate_risk(domain_result, email_result, username_result,whois_result):
 
     total_score = (
         domain_result.get("risk_score", 0)
         + email_result.get("risk_score", 0)
         + username_result.get("risk_score", 0)
+        + whois_result.get("risk_score", 0)
     )
 
     if total_score <= 20:
@@ -23,6 +24,7 @@ def calculate_risk(domain_result, email_result, username_result):
     findings.extend(domain_result.get("risks", []))
     findings.extend(email_result.get("risks", []))
     findings.extend(username_result.get("risks", []))
+    findings.extend(whois_result.get("risks", []))
 
     for platform in username_result.get("found_on", []):
         findings.append(
